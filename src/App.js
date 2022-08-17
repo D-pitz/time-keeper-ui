@@ -1,25 +1,22 @@
-import logo from './logo.svg';
+import React, { useContext, useState } from 'react';
 import './App.css';
+import { UserConsumer, UserContext, UserProvider } from './Context/UserContext';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Nav from "./Components/Nav/Nav"
+import RoutesComponent from './routes/Routes';
 
-function App() {
+
+const App = () => {
+  console.log(process.env.REACT_APP_API_URL)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='Background'>
+      <UserProvider>
+        <Nav />
+        <RoutesComponent />
+      </UserProvider>
     </div>
   );
 }
 
 export default App;
+
