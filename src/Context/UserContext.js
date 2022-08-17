@@ -20,20 +20,19 @@ const UserProvider = ({children}) => {
         window.location.reload();
     }
 
-    const getActiveUser = () => {
-        const active = localStorage.getItem('user');
-        const parsedUser = JSON.parse(active);
-        return parsedUser;
-    }
-
-    const logout = () => {
-        localStorage.clear()
-        setUser(null)
-    }
-
     return (
         <Provider value =  {{ user, login, logout, getActiveUser }}> {children} </Provider>
     )
+}
+
+export const getActiveUser = () => {
+    const active = localStorage.getItem('user');
+    const parsedUser = JSON.parse(active);
+    return parsedUser;
+}
+
+export const logout = () => {
+    localStorage.clear();
 }
 
 export { UserProvider, Consumer as UserConsumer, UserContext }
