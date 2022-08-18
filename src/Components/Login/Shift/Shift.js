@@ -13,7 +13,8 @@ const Shift = () => {
     
   return (
     <div className="defaultContainer">
-      <h4 className="userInfo"> User ID: {user.id}</h4>
+      <h4 className="userInfo"> User: {user.id}</h4>
+      <h4 className="userInfo"> Role: {user.role}</h4>
       <ShiftTable />
     </div>
   );

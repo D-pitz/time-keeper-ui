@@ -24,7 +24,7 @@ export const getShift = async (shiftId) => {
 
 export const endShift = async (shiftId) => {
     try {
-        const resp = await axios.put(`${API_URL}/shifts/${shiftId}`)
+        const resp = await axios.get(`${API_URL}/shifts/${shiftId}/end`)
         return resp;
     } catch (e) {
         return e.response;

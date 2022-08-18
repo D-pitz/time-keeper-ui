@@ -48,11 +48,6 @@ const Nav = () => {
                   Logout 
                   </Link>
               </li>
-              {/* <li>
-                <Button onClick={navigate(`/users/${user.id}`)}>
-                  Profile
-                </Button>
-              </li> */}
             </>
           ) : null}
           </div>
