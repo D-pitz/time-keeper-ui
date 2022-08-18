@@ -2,17 +2,18 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const startLunch = (shiftId) => {
+export const startLunch = async (shiftId) => {
     try {
-        const resp = axios.get(`${API_URL}/lunches/${shiftId}`)
+        const resp = await axios.get(`${API_URL}/lunches/${shiftId}`)
+        return resp;
     } catch (e) {
         console.log(e);
     }
 }
 
-const endBreak = (shiftId) => {
+export const endLunch = async (shiftId) => {
     try {
-        const resp = axios.get(`${API_URL}/lunches/${shiftId}/end`)
+        const resp = await axios.get(`${API_URL}/lunches/${shiftId}/end`)
     } catch (e) {
         console.log(e);
     }

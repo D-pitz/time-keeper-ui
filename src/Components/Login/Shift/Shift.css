@@ -1,0 +1,18 @@
+.Table {
+    border-color: black;
+    border-width: 1px;
+  }
+  
+  .Row {
+    border-color: black;
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 20px 0px;
+  }
+  
+  .Col {
+    border-color: black;
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 20px 0px;
+  }

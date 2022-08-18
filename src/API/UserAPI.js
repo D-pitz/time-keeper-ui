@@ -22,7 +22,8 @@ export const userLogin = async (data) => {
         console.log("RESP ___________ ", resp)
         return resp;
     } catch (e) {
-        console.log(e)
+        console.log(e);
+        return e.response;
     }
 }
 

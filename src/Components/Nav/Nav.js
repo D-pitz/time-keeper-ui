@@ -9,6 +9,7 @@ import "./Nav.css";
 
 const Nav = () => {
   const navigate = useNavigate();
+  const path = window.location.pathname;
 
   const callLogout = (e) => {
     logout();
@@ -26,7 +27,7 @@ const Nav = () => {
     } else {
       setIsActive(true);
     }
-  }, [isActive]);   
+  }, [isActive, path]);   
   return (
     <nav className="Nav-component">
           <div className="logo">
@@ -43,12 +44,9 @@ const Nav = () => {
                 </Link>
               </li>
               <li className="NavItem">
-                <Link to="#" onClick={callLogout} className="NavLink"> 
+                <Link to="/login" onClick={callLogout} className="NavLink"> 
                   Logout 
                   </Link>
-              </li>
-              <li>
-              <p> User Id: {userData.id} </p> 
               </li>
               {/* <li>
                 <Button onClick={navigate(`/users/${user.id}`)}>

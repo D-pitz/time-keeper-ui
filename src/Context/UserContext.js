@@ -17,7 +17,6 @@ const UserProvider = ({children}) => {
             isLogin: user.isLogin
         })   
         localStorage.setItem('user',JSON.stringify(user));
-        window.location.reload();
     }
 
     return (
@@ -33,6 +32,19 @@ export const getActiveUser = () => {
 
 export const logout = () => {
     localStorage.clear();
+}
+
+export const userObj = () => {
+    let userObj = {
+        id: "",
+        role: "",
+        isLogin: false
+    }
+    return userObj;
+}
+
+export const ProcessError = (e) => {
+    return e.data.error
 }
 
 export { UserProvider, Consumer as UserConsumer, UserContext }
