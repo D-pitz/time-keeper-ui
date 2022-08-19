@@ -16,10 +16,12 @@ import {
   validEndShift,
   validStartBreak,
   validStartLunch,
-} from "./ActiveShift";
+} from "./ActiveShiftValidator";
 import { endLunch, startLunch } from "../../../API/LunchAPI";
 import { endBreak, startBreak } from "../../../API/BreakAPI";
 import Shift from "./Shift";
+import { startShiftAdmin } from "../../../API/AdminAPI";
+import ActiveShift from "./ActiveShift";
 
 const ShiftTable = () => {
   class Shift {
@@ -45,6 +47,7 @@ const ShiftTable = () => {
   const [isBreak, setIsBreak] = useState(true);
   const [isStartBreak, setIsStartBreak] = useState(true);
   const [isEndShift, setIsEndShift] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(user.role === "ADMIN");
 
   const NO_SHIFTS = useState("You currently don't have any shifts to display");
 
@@ -65,7 +68,6 @@ const ShiftTable = () => {
 
   const callGetActiveShift = async () => {
     const resp = await getActiveShift(user.id);
-    console.log(resp);
     if (resp.data.message) {
       setShift(new Shift())
       setIsActiveShift(false);
@@ -91,7 +93,6 @@ const callStartShift = async () => {
         // setShift(resp.data);
         setEditShift(!editShift);
         setIsActiveShift(true);
-        console.log(isActiveShift);
     } catch (e) {
       console.log(e);
     }
@@ -137,7 +138,7 @@ const callStartShift = async () => {
     } else {
       setHasShift(true);
     }
-  }, [editShift]);
+  }, [editShift, ActiveShift]);
 
   return (
     <div className="tableContainer">
@@ -156,6 +157,7 @@ const callStartShift = async () => {
         </thead>
         <tbody>
           {isActiveShift ? (
+            // <ActiveShift shift = {shift} lunch = {shift.lunch} abreak = {shift.abreak} />
             <tr className="Row">
               <td className="Col">
                 {shift.shiftId || (

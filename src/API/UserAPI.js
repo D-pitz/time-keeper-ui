@@ -4,7 +4,6 @@ const APP_URL = process.env.REACT_APP_API_URL
 
 export const createUser = async (data) => {
     try {
-        console.log(APP_URL)
         const resp = await axios.post(
             `${APP_URL}/users`, data
         )
@@ -19,7 +18,6 @@ export const userLogin = async (data) => {
         const resp =  await axios.post(
             `${APP_URL}/users/login`, data
         )
-        console.log("RESP ___________ ", resp)
         return resp;
     } catch (e) {
         console.log(e);

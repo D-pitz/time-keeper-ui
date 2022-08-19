@@ -38,11 +38,11 @@ const Nav = () => {
           <div className="Active">
           {isActive ? (
               <>
-              <li className="NavItem">
+              {/* <li className="NavItem">
                 <Link to="/home" className="NavLink">
                   Home
                 </Link>
-              </li>
+              </li> */}
               <li className="NavItem">
                 <Link to="/login" onClick={callLogout} className="NavLink"> 
                   Logout 

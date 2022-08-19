@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../API/UserAPI";
-import './Register.css'
-import '../../App.css'
+import "./Register.css";
+import "../../App.css";
+import { createAdmin } from "../../API/AdminAPI";
+import { wait } from "@testing-library/user-event/dist/utils";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-      id: "",
-      role: "EMPLOYEE",
-      password: "",
-      confirmPw: ""
-    });
+
+  const [userData, setUserData] = useState({
+    id: "",
+    role: "EMPLOYEE",
+    password: "",
+    confirmPw: ""  
+  });
   const [error, setError] = useState("");
 
-  const [isEmployee, setIsEmployee] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const messages = useState({
     ROLE: "Please select role",
@@ -23,8 +26,8 @@ const Register = () => {
   });
 
   const create = async () => {
-    const res = await createUser(user);
-    console.log(res)
+    const res = await createUser(userData);
+    console.log(res);
     if (res.data.error !== undefined) {
       setError(res.data.message);
     } else {
@@ -35,68 +38,75 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (user.role === "EMPLOYEE") {
-        const userData = await create();
-        alert(`Your user id is ${userData.id}`)
+      if (userData.role === "EMPLOYEE") {
+        const userForm = await create();
+        alert(`Your user Id is ${userForm.id}`);
+        navigate("/login");
+      } else if (userData.password === userData.confirmPw) {
+        var resp = await createAdmin(userData)
+        alert(`Your user Id is ${resp.data.id}`)
         navigate("/login")
+        
       }
     } catch (e) {
       console.log(e);
     }
   };
 
-  const checkEmployee = () => {
-    if (user.role === "ADMIN") {
-        setIsEmployee(false);
+  const checkEmployee = (data) => {
+    if (userData.role === "ADMIN") {
+      setIsAdmin(true);
     } else {
-        setIsEmployee(true);
+      setIsAdmin(false);
     }
-    console.log(isEmployee);
-  }
+  };
 
   const onChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-    checkEmployee()
-  }
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+    if (e.target.name === "role") {
+      setIsAdmin(e.target.value === "ADMIN");
+    }
+  };
 
   useEffect(() => {
-    
-  }, [navigate])
+    // setIsAdmin(userData.role === "ADMIN")
+  }, [navigate]);
 
   return (
     <div className="container">
-        <div className="form-wrapper">
-            <h2>Register</h2>
-            <Form onSubmit={onSubmit} className="rounded p4 p-sm-3">
-                <Form.Select 
-                    className="input-group"
-                    type="text"
-                    name="role"
-                    value={user.role}
-                    onChange={onChange}
-                >
-                    <option value="EMPLOYEE">Employee</option>
-                    <option value="ADMIN">Admin</option>
-                </Form.Select>
-                    <Form.Control
-                        type="password"
-                        className="input-group"
-                        value={user.password}
-                        name="password"
-                        placeholder="Password"
-                        hidden={!isEmployee}
-                        onChange={onChange}
-                    /> 
-                    <Form.Control
-                    type="password"
-                    className="input-group"
-                    value={user.confirmPw}
-                    name="confirmPw"
-                    placeholder="Confirm Password"
-                    hidden={!isEmployee}
-                    onChange={onChange}
-                    />
-            <div className="d-grid gap-2">
+      <div className="form-wrapper">
+        <h2>Register</h2>
+        <Form onSubmit={onSubmit} className="rounded p4 p-sm-3">
+          <Form.Select
+            className="input-group"
+            value={userData.role}
+            name="role"
+            onChange={onChange}
+          >
+            <option value="EMPLOYEE">Employee</option>
+            <option value="ADMIN">Admin</option>
+          </Form.Select>
+          {userData.role === "ADMIN" ? (
+            <div>
+            <Form.Control
+            type="password"
+            className="input-group"
+            name="password"
+            placeholder="Password"
+            onChange={onChange}
+            />
+            <Form.Control
+            type="password"
+            className="input-group"
+            name="confirmPw"
+            placeholder="Confirm Password"
+            onChange={onChange}
+            />
+            </div>
+            ) : (
+            <></>
+          )}
+          <div className="d-grid gap-2">
             <Button
               variant="primary"
               size="med"
@@ -104,17 +114,21 @@ const Register = () => {
               value="login"
               type="submit"
               onClick={onSubmit}
-            >
+              >
               Submit
             </Button>
-            <Button variant="danger" size="med" onClick={() => navigate("/login")}>
+            <Button
+              variant="danger"
+              size="med"
+              onClick={() => navigate("/login")}
+            >
               Cancel
             </Button>
           </div>
-            </Form>
-        </div>
+        </Form>
+      </div>
     </div>
-  )
+  );
 };
 
 export default Register;
