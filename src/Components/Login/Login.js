@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./Login.css";
-import "../../App.css"
+import "../../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { UserContext, UserProvider } from "../../Context/UserContext";
-import { login, userLogin } from "../../API/UserAPI"
+import {
+  getActiveUser,
+  UserContext,
+  UserProvider,
+} from "../../Context/UserContext";
+import { login, userLogin } from "../../API/UserAPI";
 import Shift from "./Shift/Shift";
 import { render } from "@testing-library/react";
 
@@ -12,54 +16,57 @@ const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  
+
   const login = useContext(UserContext).login;
   const [user, setUser] = useState({
     id: "",
     role: "",
-    isLogin: false
+    isLogin: false,
   });
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
-  }
+  };
 
   const loginSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(user);
       const res = await userLogin(user);
       if (!res.data.error) {
-        let userData = res.data
+        let userData = res.data;
         user.id = userData.id;
         user.role = userData.role;
         user.isLogin = true;
         login(user);
         navigate("/shifts")
-        // render(<Shift user={user}/>)
       } else {
         setError(res.data.message);
-        console.log(error);
+        // console.log(error);
       }
-    } catch(e) { 
+    } catch (e) {
       console.log(e);
     }
-  }
+  };
 
-  const admin = (e) => { setIsAdmin(true); }
+  const isActive = () => {
+    if (getActiveUser() !== undefined) {
+      return <Shift />
+    }
+  };
+
+  const admin = (e) => {
+    setIsAdmin(true);
+  };
 
   useEffect(() => {
-    // if (user.isLogin === true) {
-    //   return (<Shift value={user}/>)
-    // }
-  }, [])
+    isActive();
+  }, []);
   return (
     <div className="container">
       <div className="form-wrapper">
         <h2 className="info">Sign In</h2>
-        {
-          error !== "" &&
-          <p className="error-message">{error}</p>
-        }
+        {error !== "" && <p className="error-message">{error}</p>}
         <Form onSubmit={loginSubmit} className="rounded p4 p-sm-3">
           <Form.Control
             className="input-group"
@@ -70,8 +77,7 @@ const Login = () => {
             placeholder="Id"
             onChange={handleChange}
           />
-          {
-            isAdmin &&
+          {isAdmin && (
             <Form.Control
               type="password"
               required
@@ -80,7 +86,7 @@ const Login = () => {
               className="input-group"
               onChange={handleChange}
             />
-          }
+          )}
           <div className="d-grid gap-2">
             <Button
               variant="primary"

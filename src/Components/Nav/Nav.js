@@ -22,10 +22,10 @@ const Nav = () => {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    if (userData === null) {
-      setIsActive(false);
-    } else {
+    if (getActiveUser() !== null) {
       setIsActive(true);
+    } else {
+      setIsActive(false);
     }
   }, [isActive, path]);   
   return (

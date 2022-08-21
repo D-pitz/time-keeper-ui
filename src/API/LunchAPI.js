@@ -14,6 +14,7 @@ export const startLunch = async (shiftId) => {
 export const endLunch = async (shiftId) => {
     try {
         const resp = await axios.get(`${API_URL}/lunches/${shiftId}/end`)
+        return resp;
     } catch (e) {
         console.log(e);
     }

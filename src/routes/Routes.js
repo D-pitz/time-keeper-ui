@@ -1,7 +1,8 @@
 import React from 'react';
-import {Routes, Route} from "react-router-dom"
+import {Routes, Route, useNavigate} from "react-router-dom"
 import Login from '../Components/Login/Login';
 import Shift from '../Components/Login/Shift/Shift';
+import ShiftTable from '../Components/Login/Shift/ShiftTable';
 import Register from '../Components/Register/Register';
 
 const RoutesComponent = () => {

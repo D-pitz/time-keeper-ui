@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { getUserShifts, startShift } from "../../../API/ShiftAPI";
-import { getActiveUser, userObj } from "../../../Context/UserContext";
+import { getActiveShift, getUserShifts } from "../../../API/ShiftAPI";
+import { getActiveUser } from "../../../Context/UserContext";
 import "../../../App.css";
 import "./Shift.css";
-import { ShiftObj } from "../../../Context/ShiftContext";
 import ShiftTable from "./ShiftTable";
+import StartLunch from "./Buttons/StartLunch";
+import Shifts from "./Tables/Shifts";
 
 const Shift = () => {
   const [user, setUser] = useState(getActiveUser());
-    
+  class Shift {
+    constructor() {
+      this.shiftId = null;
+      this.start = null;
+      this.end = null;
+      this.lunch = { start: null, end: null, complete: false };
+      this.abreak = { start: null, end: null, complete: false };
+    }
+  }
+
+  useEffect(() => {
+  }, []);
   return (
     <div className="defaultContainer">
       <h4 className="userInfo"> User: {user.id}</h4>
