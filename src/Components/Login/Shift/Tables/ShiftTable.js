@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "react-bootstrap";
 import { endShift, getActiveShift } from "../../../../API/ShiftAPI";
-import { getActiveUser } from "../../../../Context/UserContext";
 import StartLunch from "../Buttons/StartLunch";
 import EndLunch from "../Buttons/EndLunch";
 import EndBreak from "../Buttons/EndBreak";
@@ -30,7 +29,7 @@ const ShiftTable = (props) => {
   const [editShift, setEditShift] = useState(false);
   const [isActiveShift, setIsActiveShift] = useState(false);
   const [isEndShift, setIsEndShift] = useState(true);
-  const [shifts, setShifts] = useState(true);
+  const [shifts, setShifts] = useState(false);
   const [desc, setDesc] = useState(true);
   const [isAdmin] = useState(props.admin !== undefined);
   const [isUser] = useState(props.user !== undefined);
@@ -100,7 +99,7 @@ const ShiftTable = (props) => {
           </p>
         )}
       </div>
-      <Table className="Table">
+      <Table striped bordered className="Table">
         <thead>
           <ShiftHead />
         </thead>
@@ -139,7 +138,7 @@ const ShiftTable = (props) => {
               <Shifts active={isActiveShift} desc={desc} props={props} />
             )}
           </>
-          <Button variant="primary" onClick={(e) => setShifts(!shifts)}>
+          <Button variant="primary" className="Button" onClick={(e) => setShifts(!shifts)}>
             {shifts ? "Hide" : "Show All Shifts"}
           </Button>
         </tbody>

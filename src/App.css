@@ -111,3 +111,14 @@ h2 {
 .info-message {
   color: black;
 }
+
+.Filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Search {
+  display: flex;
+  justify-content: space-between;
+}

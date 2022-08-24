@@ -35,7 +35,7 @@ const navigate = useNavigate();
       <h4 className="userInfo"> User: {admin.id}</h4>
       <h4 className="userInfo"> {admin.role}</h4>
       <SearchBar />
-      <Table className="Table">
+      <Table striped className="Table">
         <thead>
           <tr>
             <td>User Id</td>
