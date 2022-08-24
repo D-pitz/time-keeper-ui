@@ -50,12 +50,19 @@ const EndLunch = ({ user, shift, onEdit }) => {
 
   return (
     <>
-      {isLunch ? (
+      {isAdmin && (
+        <div>
+          <Button variant="danger" onClick={handleClick}>
+            End Lunch
+          </Button>
+        </div>
+      )}
+      {isLunch && !isAdmin ? (
         <Button variant="danger" onClick={handleClick}>
           End
         </Button>
       ) : (
-        shift.lunch.end
+        <p className="info-message">{shift.lunch.end}</p>
       )}
     </>
   );

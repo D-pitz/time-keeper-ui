@@ -5,12 +5,11 @@ import { Button } from "react-bootstrap";
 import ".././Shift.css";
 
 const StartLunch = (props) => {
-  
   const [shift, setShift] = useState(props.shift);
   const [isAdmin, setIsAdmin] = useState(props.user.role === "ADMIN");
   const [isLunch, setIsLunch] = useState(false);
   const [isEdit, setIsEdit] = useState(true);
-  
+
   const validStartLunch = () => {
     switch (true) {
       case isAdmin:
@@ -27,7 +26,7 @@ const StartLunch = (props) => {
         break;
       default:
         setIsLunch(true);
-      break;
+        break;
     }
     props.onEdit();
   };
@@ -35,12 +34,12 @@ const StartLunch = (props) => {
   const changeShiftData = (data) => {
     setShift({ ...shift, lunch: data.lunch });
     setIsEdit(!isEdit);
-  }
+  };
 
   const handleClick = async (e) => {
     if (isAdmin) {
-      const resp = await startLunchAdmin(props.shift.shiftId);
-      setShift(resp.data);
+      const resp = await startLunchAdmin(shift.shiftId);
+      changeShiftData(resp.data);
     } else {
       const resp = await startLunch(shift.shiftId);
       changeShiftData(resp.data);
@@ -49,20 +48,28 @@ const StartLunch = (props) => {
 
   useEffect(() => {
     validStartLunch();
-  }, [isEdit, 
-    props.shift.abreak.start, 
-    props.shift.abreak.end, 
-    props.shift.lunch.start
+  }, [
+    isEdit,
+    props.shift.abreak.start,
+    props.shift.abreak.end,
+    props.shift.lunch.start,
   ]);
 
   return (
     <>
-      {isLunch ? (
+      {isAdmin && (
+        <div>
+          <Button variant="success" onClick={handleClick}>
+            Start Lunch
+          </Button>
+        </div>
+      )}
+      {isLunch && !isAdmin ? (
         <Button variant="success" onClick={handleClick}>
           Start
         </Button>
       ) : (
-        shift.lunch.start
+        <p className="info-message">{shift.lunch.start}</p>
       )}
     </>
   );

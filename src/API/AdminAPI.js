@@ -9,12 +9,23 @@ export const createAdmin = async (data) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
 export const loginAdmin = async (data) => {
     try {
         const resp = await axios.post(`${APP_URL}/users/login`, data)
+        return resp;
+    } catch (e) {
+        console.log(e);
+        return e.response;
+    }
+}
+
+export const getAllUsers = async () => {
+    try {
+        const resp = await axios.get(`${APP_URL}/users`)
         return resp;
     } catch (e) {
         console.log(e);
@@ -27,6 +38,7 @@ export const startShiftAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -36,6 +48,7 @@ export const endShiftAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -45,6 +58,7 @@ export const startLunchAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -54,6 +68,7 @@ export const endLunchAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -63,6 +78,7 @@ export const startBreakAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -72,5 +88,6 @@ export const endBreakAdmin = async (shiftId) => {
         return resp;
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }

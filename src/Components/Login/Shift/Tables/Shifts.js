@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { getUserShifts } from "../../../../API/ShiftAPI";
-import { getActiveUser } from "../../../../Context/UserContext";
 
-const Shifts = ({ active }) => {
-  const [user] = useState(getActiveUser());
+const Shifts = ({props, active, desc }) => {
+  const [isAdmin] = useState(props.admin !== undefined);
   const [shifts, setShifts] = useState({});
   const [hasShifts, setHasShifts] = useState(false);
+  const [message] = useState("You currently dont have any shifts to display.");
 
   const getShifts = async () => {
-    const resp = await getUserShifts(user.id);
+
+    const resp = await getUserShifts(props.user.id);
     setShifts(resp.data);
+    if (desc) setShifts(resp.data.reverse());
     if (resp.data.length > 0) {
       setHasShifts(true);
-    }
+    } 
     return resp.data;
   };
   useEffect(() => {
     getShifts();
-  }, [active]);
+  }, [active, desc]);
   return (
     <>
-      {hasShifts &&
+      {hasShifts ? 
         shifts.map((s) => (
           <tr className="Row" key={s.shiftId}>
             <td className="Col">{s.shiftId}</td>
@@ -31,7 +33,12 @@ const Shifts = ({ active }) => {
             <td className="Col">{s.abreak.start}</td>
             <td className="Col">{s.abreak.end}</td>
           </tr>
-        ))}
+        )) : (
+          <tr className="Row"> 
+            <td className="Col"><p className="error-message">{message}</p></td>
+          </tr>
+        )
+      }
     </>
   );
 };

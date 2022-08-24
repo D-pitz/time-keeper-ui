@@ -50,10 +50,10 @@ h2 {
   margin-left: -1px;
 }
 
-.button {
+.Button {
   display: block;
   width: 100%;
-  margin-top:6px;
+  margin:5px;
 }
 
 .info {
@@ -109,5 +109,5 @@ h2 {
 }
 
 .info-message {
-  color: rgb(108, 196, 255);
+  color: black;
 }

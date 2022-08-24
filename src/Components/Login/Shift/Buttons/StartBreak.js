@@ -5,7 +5,6 @@ import { Button } from "react-bootstrap";
 import ".././Shift.css";
 
 const StartBreak = ({ user, shift, onEdit }) => {
-
   const [isAdmin] = useState(user.role === "ADMIN");
   const [isEdit, setIsEdit] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
@@ -15,15 +14,19 @@ const StartBreak = ({ user, shift, onEdit }) => {
       case isAdmin:
         setIsBreak(true);
         break;
+
       case shift.start === null:
         setIsBreak(false);
         break;
+
       case shift.abreak.start !== null:
         setIsBreak(false);
         break;
+
       case shift.lunch.start !== null && !shift.lunch.complete:
         setIsBreak(false);
         break;
+
       default:
         setIsBreak(true);
         console.log("true");
@@ -41,23 +44,25 @@ const StartBreak = ({ user, shift, onEdit }) => {
       setIsEdit(!isEdit);
     }
   };
-
   useEffect(() => {
     validStartBreak();
-  }, [isEdit, 
-    shift.abreak.start, 
-    shift.lunch.start,
-    shift.lunch.end
-]);
+  }, [isEdit, shift.abreak.start, shift.lunch.start, shift.lunch.end]);
 
   return (
     <>
-      {isBreak ? (
+      {isAdmin && (
+        <div>
+          <Button variant="success" onClick={handleClick}>
+            Start Break
+          </Button>
+        </div>
+      )}
+      {isBreak && !isAdmin ? (
         <Button variant="success" onClick={handleClick}>
           Start
         </Button>
       ) : (
-        shift.abreak.start
+        <p className="info-message">{shift.abreak.start}</p>
       )}
     </>
   );

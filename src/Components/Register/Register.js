@@ -1,65 +1,66 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../API/UserAPI";
+import { createAdmin } from "../../API/AdminAPI";
 import "./Register.css";
 import "../../App.css";
-import { createAdmin } from "../../API/AdminAPI";
-import { wait } from "@testing-library/user-event/dist/utils";
 
 const Register = () => {
   const navigate = useNavigate();
-
   const [userData, setUserData] = useState({
     id: "",
     role: "EMPLOYEE",
     password: "",
-    confirmPw: ""  
+    confirmPw: "",
+  });
+  const [messages] = useState({
+    PASSWORD: "Password does not match confirm password",
+    PW_REQUIRED: "Password is required",
+    CONFIRM_REQUIRED: "Confirm Password is required"
   });
   const [error, setError] = useState("");
-
-  const [isAdmin, setIsAdmin] = useState(true);
-
-  const messages = useState({
-    ROLE: "Please select role",
-    PASSWORD: "Please enter a valid password",
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const create = async () => {
-    const res = await createUser(userData);
-    console.log(res);
-    if (res.data.error !== undefined) {
-      setError(res.data.message);
+    const resp = await createUser(userData);
+    console.log(resp);
+    if (resp.data.error !== undefined) {
+      setError(resp.data.message);
     } else {
-      return res.data;
+      alert(`Your user Id is ${resp.data.id}`);
+      navigate("/login");
     }
   };
+
+  const validAdmin = () => {
+    let e = ""
+    if (userData.confirmPw !== userData.password) e = messages.PASSWORD;
+    if (userData.confirmPw === "") e = messages.CONFIRM_REQUIRED;
+    if (userData.password === "") e = messages.PW_REQUIRED;
+    setError(e);
+    return e === ""
+  };
+
+  const newAdmin = async () => {
+      const resp = await createAdmin(userData);
+      if (resp.data.error) {
+        setError(resp.data.message);
+      } else {
+        alert(`Your user Id is ${resp.data.id}`);
+        navigate("/login");
+      }
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (userData.role === "EMPLOYEE") {
-        const userForm = await create();
-        alert(`Your user Id is ${userForm.id}`);
-        navigate("/login");
-      } else if (userData.password === userData.confirmPw) {
-        var resp = await createAdmin(userData)
-        alert(`Your user Id is ${resp.data.id}`)
-        navigate("/login")
-        
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const checkEmployee = (data) => {
-    if (userData.role === "ADMIN") {
-      setIsAdmin(true);
+    if (isAdmin) {
+      if (!validAdmin(e)) return false;
+    newAdmin();
     } else {
-      setIsAdmin(false);
-    }
-  };
+      create();
+    };
+  }
 
   const onChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -68,14 +69,13 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    // setIsAdmin(userData.role === "ADMIN")
-  }, [navigate]);
+  useEffect(() => {}, [navigate, error]);
 
   return (
     <div className="container">
       <div className="form-wrapper">
         <h2>Register</h2>
+        {error !== "" && <p className="error-message">{error}</p>}
         <Form onSubmit={onSubmit} className="rounded p4 p-sm-3">
           <Form.Select
             className="input-group"
@@ -86,25 +86,25 @@ const Register = () => {
             <option value="EMPLOYEE">Employee</option>
             <option value="ADMIN">Admin</option>
           </Form.Select>
-          {userData.role === "ADMIN" ? (
+          {isAdmin && (
             <div>
-            <Form.Control
-            type="password"
-            className="input-group"
-            name="password"
-            placeholder="Password"
-            onChange={onChange}
-            />
-            <Form.Control
-            type="password"
-            className="input-group"
-            name="confirmPw"
-            placeholder="Confirm Password"
-            onChange={onChange}
-            />
+              <Form.Control
+                type="password"
+                className="input-group"
+                required
+                name="password"
+                placeholder="Password"
+                onChange={onChange}
+              />
+              <Form.Control
+                type="password"
+                className="input-group"
+                required
+                name="confirmPw"
+                placeholder="Confirm Password"
+                onChange={onChange}
+              />
             </div>
-            ) : (
-            <></>
           )}
           <div className="d-grid gap-2">
             <Button
@@ -114,7 +114,7 @@ const Register = () => {
               value="login"
               type="submit"
               onClick={onSubmit}
-              >
+            >
               Submit
             </Button>
             <Button

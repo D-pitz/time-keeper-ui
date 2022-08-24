@@ -11,6 +11,7 @@ import {
 import { login, userLogin } from "../../API/UserAPI";
 import Shift from "./Shift/Shift";
 import { render } from "@testing-library/react";
+import { loginAdmin } from "../../API/AdminAPI";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,38 +31,33 @@ const Login = () => {
 
   const loginSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log(user);
-      const res = await userLogin(user);
-      if (!res.data.error) {
-        let userData = res.data;
-        user.id = userData.id;
-        user.role = userData.role;
-        user.isLogin = true;
-        login(user);
-        navigate("/shifts")
-      } else {
+    const res = await userLogin(user);
+    console.log(res);
+    if (!res.data.error) {
+      login(res.data);
+      navigate("/shifts");
+    } else {
+      if (res.data.message) {
         setError(res.data.message);
-        // console.log(error);
+      } else if (res.data.err) {
+        setError(res.data.error);
       }
-    } catch (e) {
-      console.log(e);
     }
   };
 
   const isActive = () => {
     if (getActiveUser() !== undefined) {
-      return <Shift />
+      return <Shift />;
     }
   };
 
   const admin = (e) => {
-    setIsAdmin(true);
+    setIsAdmin(!isAdmin);
   };
 
   useEffect(() => {
     isActive();
-  }, []);
+  }, [error]);
   return (
     <div className="container">
       <div className="form-wrapper">
@@ -80,11 +76,11 @@ const Login = () => {
           {isAdmin && (
             <Form.Control
               type="password"
-              required
               name="password"
               placeholder="Password"
               className="input-group"
               onChange={handleChange}
+              required
             />
           )}
           <div className="d-grid gap-2">

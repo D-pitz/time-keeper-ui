@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { startShift } from "../../../../API/ShiftAPI";
 
-const Active = ({ setShift, setEditShift, userId }) => {
+const Active = ({ setShift, setEditShift, user }) => {
 
   const callStartShift = async () => {
     try {
-      const resp = await startShift(userId).then(setEditShift(false));
+      const resp = await startShift(user.id).then(setEditShift(false));
         setShift(resp.data);
         setEditShift(true);
         return resp.data;
@@ -18,7 +18,7 @@ const Active = ({ setShift, setEditShift, userId }) => {
   useEffect(() => {}, []);
 
   return (
-    <Button variant="success" onClick={callStartShift}>
+    <Button variant="success" className="Button" onClick={callStartShift}>
       Start Shift
     </Button>
   );

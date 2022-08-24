@@ -4,12 +4,11 @@ const APP_URL = process.env.REACT_APP_API_URL
 
 export const createUser = async (data) => {
     try {
-        const resp = await axios.post(
-            `${APP_URL}/users`, data
-        )
+        const resp = await axios.post(`${APP_URL}/users`, data);
         return resp;
     } catch (e) {
-        console.log(e)
+        // console.log(e.response)
+        return e.response;
     }
 }
 

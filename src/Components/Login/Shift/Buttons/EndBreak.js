@@ -54,12 +54,19 @@ const StartBreak = ({ user, shift, onEdit }) => {
 
   return (
     <>
-      {isBreak ? (
+      {isAdmin && (
+        <div>
+          <Button variant="danger" onClick={handleClick}>
+            End Break
+          </Button>
+        </div>
+      )}
+      {!isAdmin && isBreak ? (
         <Button variant="danger" onClick={handleClick}>
           End
         </Button>
       ) : (
-        shift.abreak.end
+        <p className="info-message">{shift.abreak.end}</p>
       )}
     </>
   );
