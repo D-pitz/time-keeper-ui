@@ -10,6 +10,8 @@ import ShiftHead from "./ShiftHead";
 import StartBreak from "../Buttons/StartBreak";
 import "../../../../App.css";
 import "../Shift.css";
+import { endShiftAdmin } from "../../../../API/AdminAPI";
+import { useParams } from "react-router-dom";
 
 const ShiftTable = (props) => {
   class Shift {
@@ -21,27 +23,27 @@ const ShiftTable = (props) => {
       this.abreak = { start: null, end: null, complete: false };
     }
   }
-
+  const params = useParams();
   const [shift, setShift] = useState(new Shift());
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const [editShift, setEditShift] = useState(false);
   const [isActiveShift, setIsActiveShift] = useState(false);
   const [isEndShift, setIsEndShift] = useState(true);
   const [shifts, setShifts] = useState(false);
-  const [desc, setDesc] = useState(true);
-  const [isAdmin] = useState(props.admin !== undefined);
+  const [desc, setDesc] = useState(props.isAdmin);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isUser] = useState(props.user !== undefined);
-  const [admin, setAdmin] = useState(props.admin);
 
   const callGetActiveShift = async () => {
-    const resp = await getActiveShift(props.user.id);
+    const resp = await getActiveShift(params.id);
     if (resp.data.error) {
       setShift(new Shift());
       setIsActiveShift(false);
       setErrorMessage(resp.data.message);
+      setIsAdmin(props.isAdmin);
     } else {
+      setIsAdmin(props.isAdmin);
       setIsActiveShift(true);
       setErrorMessage("");
       setShift(resp.data);
@@ -49,13 +51,23 @@ const ShiftTable = (props) => {
         setIsEndShift(false);
       }
     }
+    if (isAdmin) {
+      setIsEndShift(false);
+    }
   };
 
   const callEndShift = async (e) => {
-    const resp = await endShift(shift.shiftId);
-    setEditShift(!editShift);
-    setIsActiveShift(false);
-    setIsEndShift(true);
+    if (isAdmin) {
+      await endShiftAdmin(shift.shiftId);
+      setEditShift(!editShift);
+      setIsActiveShift(false);
+      setIsEndShift(true);
+    } else {
+      await endShift(shift.shiftId);
+      setEditShift(!editShift);
+      setIsActiveShift(false);
+      setIsEndShift(true);
+    }
   };
 
   const shiftsDesc = (e) => {
@@ -68,11 +80,11 @@ const ShiftTable = (props) => {
 
   useEffect(() => {
     callGetActiveShift();
-  }, [editShift, isAdmin]);
+  }, [editShift]);
 
   return (
     <div className="tableContainer">
-      {isUser && isAdmin && (
+      {isAdmin && (
         <p className="info-message">
           User: {props.user.id} {props.user.role}
         </p>
@@ -90,10 +102,11 @@ const ShiftTable = (props) => {
             />
           )}
         </div>
+        <h2>Shifts</h2>
         {isAdmin && (
           <p className="info-message">
             Filter:{" "}
-            <Button variant="info" onClick={(e) => shiftsDesc(e)}>
+            <Button variant="dark" onClick={(e) => shiftsDesc(e)}>
               {desc ? "Desc" : "Asc"}
             </Button>
           </p>
@@ -111,7 +124,7 @@ const ShiftTable = (props) => {
               <td className="Col">
                 {shift.end || (
                   <Button
-                    variant="danger"
+                    variant={isAdmin ? 'outline-danger' : 'danger'}
                     hidden={isEndShift}
                     onClick={callEndShift}
                   >
@@ -120,16 +133,16 @@ const ShiftTable = (props) => {
                 )}
               </td>
               <td className="Col">
-                <StartLunch user={props.user} shift={shift} onEdit={onEdit} />
+                <StartLunch shift={shift} onEdit={onEdit} isAdmin={isAdmin} />
               </td>
               <td className="Col">
-                <EndLunch user={props.user} shift={shift} onEdit={onEdit} />
+                <EndLunch shift={shift} onEdit={onEdit} isAdmin={isAdmin} />
               </td>
               <td className="Col">
-                <StartBreak user={props.user} shift={shift} onEdit={onEdit} />
+                <StartBreak shift={shift} onEdit={onEdit} isAdmin={isAdmin} />
               </td>
               <td className="Col">
-                <EndBreak user={props.user} shift={shift} onEdit={onEdit} />
+                <EndBreak shift={shift} onEdit={onEdit} isAdmin={isAdmin} />
               </td>
             </tr>
           )}
@@ -138,10 +151,14 @@ const ShiftTable = (props) => {
               <Shifts active={isActiveShift} desc={desc} props={props} />
             )}
           </>
-          <Button variant="primary" className="Button" onClick={(e) => setShifts(!shifts)}>
-            {shifts ? "Hide" : "Show All Shifts"}
-          </Button>
         </tbody>
+        <Button
+          variant="dark"
+          className="Button"
+          onClick={(e) => setShifts(!shifts)}
+        >
+          {shifts ? "Hide" : "Show All Shifts"}
+        </Button>
       </Table>
     </div>
   );

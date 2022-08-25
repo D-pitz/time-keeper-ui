@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { getUserShifts } from "../../../../API/ShiftAPI";
 
 const Shifts = ({props, active, desc }) => {
+  const params = useParams();
   const [isAdmin] = useState(props.admin !== undefined);
   const [shifts, setShifts] = useState({});
   const [hasShifts, setHasShifts] = useState(false);
@@ -9,7 +11,7 @@ const Shifts = ({props, active, desc }) => {
 
   const getShifts = async () => {
 
-    const resp = await getUserShifts(props.user.id);
+    const resp = await getUserShifts(params.id);
     setShifts(resp.data);
     if (desc) setShifts(resp.data.reverse());
     if (resp.data.length > 0) {

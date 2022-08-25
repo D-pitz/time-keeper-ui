@@ -3,7 +3,6 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../../API/UserAPI";
 import "../../../App.css";
-import Shift from "../../Login/Shift/Shift";
 
 const SearchBar = (props) => {
   const navigate = useNavigate();
@@ -32,15 +31,18 @@ const SearchBar = (props) => {
     }
   };
 
-  useEffect(() => {}, []);
-  if (show) {
-    console.log(user.id);
-    // navigate(`/ADMIN/shifts/${user.id}`)
-    return <Shift admin={props.admin} user={user} />;
+  const search = () => {
+    if (show) {
+      navigate(`/ADMIN/shifts/${user.id}`)
+    }
   }
+
+  useEffect(() => {
+    search();
+  }, [show]);
+
   return (
     <div>
-      {error !== "" && <p className="error-message">{error}</p>}
       <div className="Search">
         <Form className="Search" placeholder="SearchById">
           <input
@@ -50,12 +52,13 @@ const SearchBar = (props) => {
             type="search"
             name="searchInput"
             placeholder="Search By Id"
-          />
-          <Button class="btn btn-primary" onClick={handleClick}>
+            />
+          <Button variant="dark" onClick={handleClick}>
             Search
           </Button>
         </Form>
       </div>
+            {error !== "" && <p className="error-message">{error}</p>}
     </div>
   );
 };

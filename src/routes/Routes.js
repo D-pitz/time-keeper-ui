@@ -12,9 +12,10 @@ const RoutesComponent = (props) => {
             <Route path="/" element = { <Login /> } />
             <Route path="/login" element = { <Login /> } />
             <Route path="/register" element = { <Register /> } />
-            <Route path="/shifts" element = { <Shift /> } />
+            <Route path="/shifts/:id" element = { <Shift /> } />
             <Route path="/shifts/user" element= { <ShiftTable user = {props.user}/>} />
             <Route path="/ADMIN/users" element = { <AllUsers /> } />
+            <Route path="/ADMIN/shifts/:id" element = { <Shift /> } />
         </Routes>
     )
 }

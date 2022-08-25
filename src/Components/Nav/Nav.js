@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getActiveUser, logout } from "../../Context/UserContext";
 import clock from "../../images/clock.png";
 import "./Nav.css";
@@ -38,25 +37,28 @@ const Nav = () => {
           {isActive && isAdmin ? (
             <>
               <li className="NavItem">
-                <Link to="/shifts" className="NavLink">Home</Link>
-              </li>
-              <li>
-                <Link to="/ADMIN/users" className="NavLink">
-                  Users
-                </Link>
+                <Link to={`/shifts/${userData.id}`} className="NavLink">Your Shifts</Link>
               </li>
               <li className="NavItem">
-                <Link to="/login" onClick={callLogout} className="NavLink">
-                  Logout
-                </Link>
+                <Link to='/register' className="NavLink">Create</Link>
+              </li>
+              <li>
+                <Link to="/ADMIN/users" className="NavLink">Users</Link>
+              </li>
+              <li className="NavItem">
+                <Link to="/login" onClick={callLogout} className="NavLink">Logout</Link>
               </li>
             </>
           ) : (
-            <li className="NavItem">
+            <>
+            {isActive &&
+              <li className="NavItem">
               <Link to="/login" onClick={callLogout} className="NavLink">
-                Logout
+              Logout
               </Link>
-            </li>
+              </li>
+            }
+            </>
           )}
         </div>
       </ul>

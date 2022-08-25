@@ -4,8 +4,7 @@ import { endBreak, startBreak } from "../../../../API/BreakAPI";
 import { Button } from "react-bootstrap";
 import ".././Shift.css";
 
-const StartBreak = ({ user, shift, onEdit }) => {
-  const [isAdmin] = useState(user.role === "ADMIN");
+const StartBreak = ({ shift, onEdit, isAdmin }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
 
@@ -29,7 +28,6 @@ const StartBreak = ({ user, shift, onEdit }) => {
 
       default:
         setIsBreak(true);
-        console.log("true");
         break;
     }
     onEdit();
@@ -52,7 +50,7 @@ const StartBreak = ({ user, shift, onEdit }) => {
     <>
       {isAdmin && (
         <div>
-          <Button variant="success" onClick={handleClick}>
+          <Button variant="outline-success" onClick={handleClick}>
             Start Break
           </Button>
         </div>

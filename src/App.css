@@ -32,7 +32,8 @@
 }
 
 h2 {
-  color:  #0d6efd;
+  /* color:  #0d6efd; */
+  color: #212529;
   text-align: center;
 }
 
@@ -77,6 +78,7 @@ h2 {
 .Table {
   border-color: black;
   border-width: 1px;
+  table-layout:fixed;
 }
 
 .Row {
@@ -114,7 +116,7 @@ h2 {
 
 .Filter {
   display: flex;
-  justify-content: space-between;
+  justify-content:space-between;
   align-items: center;
 }
 

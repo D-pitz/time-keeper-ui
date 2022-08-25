@@ -9,9 +9,6 @@ import {
   UserProvider,
 } from "../../Context/UserContext";
 import { login, userLogin } from "../../API/UserAPI";
-import Shift from "./Shift/Shift";
-import { render } from "@testing-library/react";
-import { loginAdmin } from "../../API/AdminAPI";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,23 +28,25 @@ const Login = () => {
 
   const loginSubmit = async (e) => {
     e.preventDefault();
+    if (typeof Number(user.id) !== 'number') {
+      return setError("User Id must be a number")
+    }
     const res = await userLogin(user);
     console.log(res);
     if (!res.data.error) {
       login(res.data);
-      navigate("/shifts");
-    } else {
-      if (res.data.message) {
-        setError(res.data.message);
-      } else if (res.data.err) {
-        setError(res.data.error);
-      }
+      navigate(`/shifts/${user.id}`);
+    }
+    if (res.data.message) {
+      setError(res.data.message);
+    } else if (res.data.err) {
+      setError(res.data.error);
     }
   };
 
   const isActive = () => {
-    if (getActiveUser() !== undefined) {
-      return <Shift />;
+    if (getActiveUser().id !== "") {
+      navigate(`/shifts/${getActiveUser().id}`);
     }
   };
 
@@ -56,8 +55,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    isActive();
-  }, [error]);
+
+  }, [error, navigate]);
   return (
     <div className="container">
       <div className="form-wrapper">

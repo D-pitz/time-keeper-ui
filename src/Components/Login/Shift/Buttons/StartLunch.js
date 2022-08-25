@@ -6,7 +6,7 @@ import ".././Shift.css";
 
 const StartLunch = (props) => {
   const [shift, setShift] = useState(props.shift);
-  const [isAdmin, setIsAdmin] = useState(props.user.role === "ADMIN");
+  const [isAdmin, setIsAdmin] = useState(props.isAdmin);
   const [isLunch, setIsLunch] = useState(false);
   const [isEdit, setIsEdit] = useState(true);
 
@@ -59,7 +59,7 @@ const StartLunch = (props) => {
     <>
       {isAdmin && (
         <div>
-          <Button variant="success" onClick={handleClick}>
+          <Button variant="outline-success" onClick={handleClick}>
             Start Lunch
           </Button>
         </div>

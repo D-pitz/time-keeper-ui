@@ -31,6 +31,7 @@ export const getUser = async (userId) => {
         )
     } catch (e) {
         console.log(e);
+        return e.response;
     }
 }
 
@@ -40,6 +41,7 @@ export const deleteUser = async (userId) => {
             `${APP_URL}/users/${userId}`
         )
     } catch (e) {
-        console.log(e);
+        console.log(e.response);
+        return e.response;
     }
 }

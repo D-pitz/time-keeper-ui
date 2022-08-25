@@ -4,8 +4,7 @@ import { endLunch } from "../../../../API/LunchAPI";
 import { Button } from "react-bootstrap";
 import ".././Shift.css";
 
-const EndLunch = ({ user, shift, onEdit }) => {
-  const [isAdmin, setIsAdmin] = useState(user.role === "ADMIN");
+const EndLunch = ({ shift, onEdit, isAdmin }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isLunch, setIsLunch] = useState(false);
 
@@ -52,7 +51,7 @@ const EndLunch = ({ user, shift, onEdit }) => {
     <>
       {isAdmin && (
         <div>
-          <Button variant="danger" onClick={handleClick}>
+          <Button variant="outline-danger" onClick={handleClick}>
             End Lunch
           </Button>
         </div>

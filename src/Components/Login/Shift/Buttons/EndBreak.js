@@ -4,8 +4,7 @@ import { endBreak, startBreak } from "../../../../API/BreakAPI";
 import { Button } from "react-bootstrap";
 import ".././Shift.css";
 
-const StartBreak = ({ user, shift, onEdit }) => {
-  const [isAdmin] = useState(user.role === "ADMIN");
+const EndBreak = ({ shift, onEdit, isAdmin }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
 
@@ -56,7 +55,7 @@ const StartBreak = ({ user, shift, onEdit }) => {
     <>
       {isAdmin && (
         <div>
-          <Button variant="danger" onClick={handleClick}>
+          <Button variant="outline-danger" onClick={handleClick}>
             End Break
           </Button>
         </div>
@@ -72,4 +71,4 @@ const StartBreak = ({ user, shift, onEdit }) => {
   );
 };
 
-export default StartBreak;
+export default EndBreak;
